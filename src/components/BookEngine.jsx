@@ -1,0 +1,179 @@
+import React, { useState, useEffect, useCallback } from 'react'
+
+export default function BookEngine({ children, activeIndex, setActiveIndex, totalPages }) {
+  const [turnDirection, setTurnDirection] = useState(null) // 'next' or 'prev'
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [touchStartX, setTouchStartX] = useState(null)
+
+  const chapterNames = [
+    'Cover',
+    'Prologue',
+    'The Work',
+    'Field Notes',
+    'Marginalia',
+    'Verses',
+    'Appendix',
+    'Contact'
+  ]
+
+  const turnPage = useCallback((newIndex, direction) => {
+    if (newIndex === activeIndex || isTransitioning) return
+    if (newIndex < 0 || newIndex >= totalPages) return
+
+    setTurnDirection(direction || (newIndex > activeIndex ? 'next' : 'prev'))
+    setIsTransitioning(true)
+
+    setTimeout(() => {
+      setActiveIndex(newIndex)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 280)
+
+    setTimeout(() => {
+      setIsTransitioning(false)
+      setTurnDirection(null)
+    }, 650)
+  }, [activeIndex, isTransitioning, totalPages, setActiveIndex])
+
+  const goNext = useCallback(() => {
+    if (activeIndex < totalPages - 1) {
+      turnPage(activeIndex + 1, 'next')
+    }
+  }, [activeIndex, totalPages, turnPage])
+
+  const goPrev = useCallback(() => {
+    if (activeIndex > 0) {
+      turnPage(activeIndex - 1, 'prev')
+    }
+  }, [activeIndex, turnPage])
+
+  // Keyboard Navigation (Arrow Keys)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault()
+        goNext()
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault()
+        goPrev()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [goNext, goPrev])
+
+  // Mobile Touch Swipe Handling
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches[0].clientX)
+  }
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX === null) return
+    const touchEndX = e.changedTouches[0].clientX
+    const diffX = touchStartX - touchEndX
+
+    if (Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        goNext()
+      } else {
+        goPrev()
+      }
+    }
+    setTouchStartX(null)
+  }
+
+  return (
+    <div className="app-container">
+      {/* Top Header / Bookmark Ribbon */}
+      <header className="site-header">
+        <button 
+          className="brand-mark" 
+          onClick={() => turnPage(0, 'prev')} 
+          style={{ background: 'none', border: 'none', textAlign: 'left' }}
+        >
+          <span className="brand-initial">K</span>
+          <span>Khushi Singh</span>
+        </button>
+
+        <nav aria-label="Book Chapters">
+          <ul className="header-chapters">
+            {chapterNames.map((name, idx) => (
+              <li key={idx}>
+                <button
+                  className={`chapter-tab ${activeIndex === idx ? 'active' : ''}`}
+                  onClick={() => turnPage(idx)}
+                >
+                  <span className="chap-num">
+                    {idx === 0 ? '' : idx === 7 ? 'Fin.' : `${idx}.`}
+                  </span>
+                  {name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </header>
+
+      {/* 3D Book Viewport Stage */}
+      <main className="book-stage">
+        <div 
+          className="book-viewport"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div 
+            className={`page-turn-wrapper ${
+              turnDirection === 'next' ? 'page-turn-flip-next' : turnDirection === 'prev' ? 'page-turn-flip-prev' : ''
+            }`}
+          >
+            {/* Render active chapter component */}
+            {children}
+          </div>
+
+          {/* Page Corner Flip Affordances */}
+          {activeIndex < totalPages - 1 && (
+            <div 
+              className="corner-curl" 
+              onClick={goNext} 
+              title="Next Page (Click or press →)" 
+              aria-label="Turn to next page"
+            />
+          )}
+
+          {activeIndex > 0 && (
+            <div 
+              className="corner-curl corner-curl-prev" 
+              onClick={goPrev} 
+              title="Previous Page (Click or press ←)" 
+              aria-label="Turn to previous page"
+            />
+          )}
+        </div>
+      </main>
+
+      {/* Page Footer */}
+      <footer className="page-footer" style={{ padding: '1rem 4rem', border: 'none' }}>
+        <div>
+          {activeIndex > 0 && (
+            <button className="nav-btn" onClick={goPrev}>
+              ← Previous Chapter
+            </button>
+          )}
+        </div>
+
+        <div className="page-number">
+          Page {activeIndex + 1} of {totalPages}
+        </div>
+
+        <div>
+          {activeIndex < totalPages - 1 && (
+            <button className="nav-btn" onClick={goNext}>
+              Next Chapter →
+            </button>
+          )}
+        </div>
+      </footer>
+    </div>
+  )
+}
