@@ -3,13 +3,12 @@ import React from 'react'
 export default function DnaHelixSpine({ activeChapter, totalChapters, isTransitioning, onSelectChapter }) {
   const chapterLabels = [
     'Cover',
-    'I. Prologue',
-    'II. The Work',
-    'III. Field Notes',
-    'IV. Marginalia',
-    'V. Verses',
-    'VI. Appendix',
-    'Closing'
+    'Prologue',
+    'The Work',
+    'Field Notes',
+    'Marginalia',
+    'Appendix',
+    'Contact'
   ]
 
   // Render SVG DNA Double Helix for desktop

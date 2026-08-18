@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import BookEngine from './components/BookEngine'
-import DnaHelixSpine from './components/DnaHelixSpine'
 
 import CoverPage from './components/pages/CoverPage'
 import ProloguePage from './components/pages/ProloguePage'
 import WorkPages from './components/pages/WorkPages'
 import FieldNotesPage from './components/pages/FieldNotesPage'
 import MarginaliaPage from './components/pages/MarginaliaPage'
-import VersesPage from './components/pages/VersesPage'
 import AppendixPage from './components/pages/AppendixPage'
 import ContactPage from './components/pages/ContactPage'
 
@@ -15,7 +13,7 @@ export default function App() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
-  const TOTAL_PAGES = 8
+  const TOTAL_PAGES = 7
 
   const handleSelectChapter = (index) => {
     if (index === activeIndex) return
@@ -39,10 +37,8 @@ export default function App() {
       case 4:
         return <MarginaliaPage />
       case 5:
-        return <VersesPage />
-      case 6:
         return <AppendixPage />
-      case 7:
+      case 6:
         return <ContactPage />
       default:
         return <CoverPage onOpenBook={() => handleSelectChapter(1)} />
@@ -51,14 +47,6 @@ export default function App() {
 
   return (
     <>
-      {/* DNA Double-Helix Progress & Navigation Spine */}
-      <DnaHelixSpine
-        activeChapter={activeIndex}
-        totalChapters={TOTAL_PAGES}
-        isTransitioning={isTransitioning}
-        onSelectChapter={handleSelectChapter}
-      />
-
       {/* 3D Page Turning Book Engine */}
       <BookEngine
         activeIndex={activeIndex}

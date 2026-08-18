@@ -57,7 +57,7 @@ export default function CoverPage({ onOpenBook }) {
         </div>
 
         {/* Open Book Prompt */}
-        <div>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button 
             className="cta-button" 
             onClick={onOpenBook}
@@ -69,6 +69,17 @@ export default function CoverPage({ onOpenBook }) {
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </button>
+
+          <a
+            href="/resume.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cta-button"
+            style={{ background: 'transparent', color: 'var(--ink-blue)', border: '1px solid var(--border-sand)', boxShadow: 'none' }}
+            aria-label="View portfolio resume"
+          >
+            <span>View Resume</span>
+          </a>
         </div>
 
         <div style={{ marginTop: '3rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>

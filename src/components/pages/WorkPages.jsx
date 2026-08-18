@@ -4,32 +4,32 @@ export default function WorkPages() {
   const projects = [
     {
       id: 'recblock',
-      title: 'RecBlock — Web 2.5 Decentralised EHR System',
+      title: 'RecBlock: Web 2.5 Decentralised EHR System',
       tags: ['Solidity', 'Polygon PoS', 'IPFS', 'React', 'Node.js', 'AES-256-GCM', 'ERC-4337'],
       github: 'https://github.com/KhushiSingh1008',
       narrative: 'A Web 2.5 bridge giving patients full cryptographic record ownership with Web2-grade usability.',
       metrics: [
-        'Eliminates wallet and gas-fee friction via ERC-4337 Account Abstraction (Privy + Pimlico Paymaster) — INR 0.27 ($0.003) per transaction',
+        'Eliminates wallet and gas-fee friction via ERC-4337 Account Abstraction (Privy + Pimlico Paymaster) for INR 0.27 ($0.003) per transaction',
         '1.5s average retrieval: AES-256-GCM encrypted records stored on IPFS, decrypted locally, bypassing on-chain consensus for reads while anchoring keccak256 integrity proofs on Polygon PoS for tamper-proof audit trails'
       ]
     },
     {
       id: 'biotoken',
-      title: 'BioToken — Reagent Provenance & Verification',
+      title: 'BioToken: Reagent Provenance & Verification',
       tags: ['Python', 'XGBoost', 'Solidity', 'Polygon PoS', 'ZK-SNARKs', 'FastAPI', 'RDKit'],
       github: 'https://github.com/KhushiSingh1008',
-      narrative: 'End-to-end reagent authentication pipeline from manufacturer HPLC scan to on-chain ZK proof, addressing supply chain fraud without exposing proprietary chemical data — $0.0087 per vial on Polygon PoS.',
+      narrative: 'End-to-end reagent authentication pipeline from manufacturer HPLC scan to on-chain ZK proof, addressing supply chain fraud without exposing proprietary chemical data at $0.0087 per vial on Polygon PoS.',
       metrics: [
-        'XGBoost anomaly classifier trained on 77,901 molecules (137 RDKit features) to detect tampered reagents via HPLC retention-time deviation — AUC 0.9798, F1 0.9351, validated on 1,000 real multi-lab entries and 15 published degradation measurements',
+        'XGBoost anomaly classifier trained on 77,901 molecules (137 RDKit features) to detect tampered reagents via HPLC retention-time deviation with AUC 0.9798 and F1 0.9351, validated on 1,000 real multi-lab entries and 15 published degradation measurements',
         '2 Solidity smart contracts managing 5 lifecycle states with role-based access control; FastAPI backend handles webhook-based custody logging and cross-company consensus validation'
       ]
     },
     {
       id: 'navisense',
-      title: 'NaviSense — Inclusive Visual Assistance Platform',
+      title: 'NaviSense: Inclusive Visual Assistance Platform',
       tags: ['Flutter', 'YOLOv8n TFLite', 'Python', 'Firebase', 'On-Device AI'],
       github: 'https://github.com/KhushiSingh1008',
-      narrative: 'Quantized YOLOv8n TFLite model deployed entirely on-device, zero network dependency — real-time inference at 1 frame/3s, built for 70M+ visually impaired users in low-connectivity regions.',
+      narrative: 'Quantized YOLOv8n TFLite model deployed entirely on-device, zero network dependency, with real-time inference at 1 frame per 3 seconds for 70M+ visually impaired users in low-connectivity regions.',
       award: '🏆 Won 1st Place, Hack4Innovation (VESIT × Rotary Club of Mumbai, March 2026)',
       metrics: [
         'Zero network dependency with full on-device quantized model quantization for low latency and privacy',
@@ -42,7 +42,7 @@ export default function WorkPages() {
     <div className="page-container animate-fade-in">
       <header className="chapter-header">
         <span className="chapter-numeral">Chapter II</span>
-        <h2 className="chapter-title">The Work — Engineering &amp; Systems</h2>
+        <h2 className="chapter-title">The Work: Engineering &amp; Systems</h2>
         <p className="chapter-subtitle">Architectural case studies bridging cryptography, machine learning, and healthcare</p>
       </header>
 

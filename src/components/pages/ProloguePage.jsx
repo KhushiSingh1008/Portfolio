@@ -5,7 +5,7 @@ export default function ProloguePage() {
     <div className="page-container animate-fade-in">
       <header className="chapter-header">
         <span className="chapter-numeral">Chapter I</span>
-        <h2 className="chapter-title">Prologue — The Instinct to Notice Patterns</h2>
+        <h2 className="chapter-title">Prologue: The Instinct to Notice Patterns</h2>
         <p className="chapter-subtitle">About my background, orientation, and curiosity</p>
       </header>
 
@@ -15,7 +15,7 @@ export default function ProloguePage() {
         </p>
 
         <p>
-          Rather than viewing research and system architecture as separate domains, I approach them as dual lenses for the same core objective: taking messy, complex biological or distributed systems and engineering clean, verifiable abstractions. My recent work bridges decentralized infrastructure with biomedical applications — from zero-knowledge reagent tracking to on-device neural inference for medical imaging.
+          Rather than viewing research and system architecture as separate domains, I approach them as dual lenses for the same core objective: taking messy, complex biological or distributed systems and engineering clean, verifiable abstractions. My recent work bridges decentralized infrastructure with biomedical applications, from zero-knowledge reagent tracking to on-device neural inference for medical imaging.
         </p>
 
         <p>

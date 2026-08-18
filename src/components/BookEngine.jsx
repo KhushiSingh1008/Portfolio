@@ -11,7 +11,6 @@ export default function BookEngine({ children, activeIndex, setActiveIndex, tota
     'The Work',
     'Field Notes',
     'Marginalia',
-    'Verses',
     'Appendix',
     'Contact'
   ]
@@ -83,6 +82,10 @@ export default function BookEngine({ children, activeIndex, setActiveIndex, tota
     setTouchStartX(null)
   }
 
+  // Calculate dynamic stacked page thicknesses for left and right leaf bulk
+  const leftStackThickness = Math.max(3, Math.round((activeIndex / (totalPages - 1)) * 14))
+  const rightStackThickness = Math.max(3, Math.round(((totalPages - 1 - activeIndex) / (totalPages - 1)) * 14))
+
   return (
     <div className="app-container">
       {/* Top Header / Bookmark Ribbon */}
@@ -105,7 +108,7 @@ export default function BookEngine({ children, activeIndex, setActiveIndex, tota
                   onClick={() => turnPage(idx)}
                 >
                   <span className="chap-num">
-                    {idx === 0 ? '' : idx === 7 ? 'Fin.' : `${idx}.`}
+                    {idx === 0 ? '' : idx === 6 ? 'Fin.' : `${idx}.`}
                   </span>
                   {name}
                 </button>
@@ -115,63 +118,98 @@ export default function BookEngine({ children, activeIndex, setActiveIndex, tota
         </nav>
       </header>
 
+      {/* Persistent Fixed Side Arrow Navigation Affordances */}
+      {activeIndex > 0 && (
+        <button 
+          className="nav-arrow-fixed nav-arrow-left" 
+          onClick={goPrev}
+          aria-label="Previous Chapter"
+          title="Previous Chapter (←)"
+        >
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 19L8 12L15 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      )}
+
+      {activeIndex < totalPages - 1 && (
+        <button 
+          className="nav-arrow-fixed nav-arrow-right" 
+          onClick={goNext}
+          aria-label="Next Chapter"
+          title="Next Chapter (→)"
+        >
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      )}
+
       {/* 3D Book Viewport Stage */}
       <main className="book-stage">
-        <div 
-          className="book-viewport"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
+        {/* Outer Hardcover Frame containing the 3D Book Object */}
+        <div className="book-hardcover-wrapper">
+          {/* Stacked Pages Bulk (Left Side) */}
           <div 
-            className={`page-turn-wrapper ${
-              turnDirection === 'next' ? 'page-turn-flip-next' : turnDirection === 'prev' ? 'page-turn-flip-prev' : ''
-            }`}
+            className="book-stack-left" 
+            style={{ width: `${leftStackThickness}px` }} 
+            aria-hidden="true" 
+          />
+
+          {/* Stacked Pages Bulk (Right Side) */}
+          <div 
+            className="book-stack-right" 
+            style={{ width: `${rightStackThickness}px` }} 
+            aria-hidden="true" 
+          />
+
+          {/* Main Book Surface Container */}
+          <div 
+            className="book-viewport"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
-            {/* Render active chapter component */}
-            {children}
+            {/* Realistic Center Gutter Shadow Overlay */}
+            <div className="book-spine-gutter" aria-hidden="true" />
+            
+            {/* Page Spread Curvature Lighting */}
+            <div className="book-spread-lighting" aria-hidden="true" />
+
+            <div 
+              className={`page-turn-wrapper ${
+                turnDirection === 'next' ? 'page-turn-flip-next' : turnDirection === 'prev' ? 'page-turn-flip-prev' : ''
+              }`}
+            >
+              {/* Render active chapter component */}
+              {children}
+            </div>
+
+            {/* Page Corner Flip Affordances */}
+            {activeIndex < totalPages - 1 && (
+              <div 
+                className="corner-curl" 
+                onClick={goNext} 
+                title="Next Page (Click or press →)" 
+                aria-label="Turn to next page"
+              />
+            )}
+
+            {activeIndex > 0 && (
+              <div 
+                className="corner-curl corner-curl-prev" 
+                onClick={goPrev} 
+                title="Previous Page (Click or press ←)" 
+                aria-label="Turn to previous page"
+              />
+            )}
           </div>
-
-          {/* Page Corner Flip Affordances */}
-          {activeIndex < totalPages - 1 && (
-            <div 
-              className="corner-curl" 
-              onClick={goNext} 
-              title="Next Page (Click or press →)" 
-              aria-label="Turn to next page"
-            />
-          )}
-
-          {activeIndex > 0 && (
-            <div 
-              className="corner-curl corner-curl-prev" 
-              onClick={goPrev} 
-              title="Previous Page (Click or press ←)" 
-              aria-label="Turn to previous page"
-            />
-          )}
         </div>
       </main>
 
-      {/* Page Footer */}
-      <footer className="page-footer" style={{ padding: '1rem 4rem', border: 'none' }}>
-        <div>
-          {activeIndex > 0 && (
-            <button className="nav-btn" onClick={goPrev}>
-              ← Previous Chapter
-            </button>
-          )}
-        </div>
-
+      {/* Page Footer (Page Counter only) */}
+      <footer className="page-footer" style={{ padding: '1rem 4rem', justifyContent: 'center', border: 'none' }}>
         <div className="page-number">
           Page {activeIndex + 1} of {totalPages}
-        </div>
-
-        <div>
-          {activeIndex < totalPages - 1 && (
-            <button className="nav-btn" onClick={goNext}>
-              Next Chapter →
-            </button>
-          )}
         </div>
       </footer>
     </div>

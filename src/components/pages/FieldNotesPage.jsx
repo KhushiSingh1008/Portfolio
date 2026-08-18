@@ -5,7 +5,7 @@ export default function FieldNotesPage() {
     {
       role: 'Software Developer & Research Intern',
       organization: 'VJTI (Veermata Jijabai Technological Institute)',
-      period: 'May 2025 – Jul 2025',
+      period: 'May 2025 to Jul 2025',
       domain: 'Medical Computer Vision & Deep Learning',
       points: [
         'Developed deep learning models for automated disease classification from multi-modal medical scans (MRI, CT, X-ray) using TensorFlow, HuggingFace, CNNs (ResNet), and Vision Transformers (ViTs).',
@@ -16,7 +16,7 @@ export default function FieldNotesPage() {
     {
       role: 'Junior Public Relations Officer',
       organization: 'ISTE-VESIT',
-      period: 'Aug 2024 – Present',
+      period: 'Aug 2024 to June 2026',
       domain: 'Stakeholder Communications & Outreach',
       points: [
         'Managed communications and external stakeholder coordination for 10+ major technical events per academic year.',
@@ -26,7 +26,7 @@ export default function FieldNotesPage() {
     {
       role: 'Graphics Head',
       organization: 'VESLIT (VESIT Literary & Technical Society)',
-      period: '2024 – Present',
+      period: '2024 to Present',
       domain: 'Visual Identity & Design Systems',
       points: [
         'Directed visual identity and creative media design for flagship literary and technical publications, symposia, and events.'
@@ -38,7 +38,7 @@ export default function FieldNotesPage() {
     <div className="page-container animate-fade-in">
       <header className="chapter-header">
         <span className="chapter-numeral">Chapter III</span>
-        <h2 className="chapter-title">Field Notes — Experience &amp; Research</h2>
+        <h2 className="chapter-title">Field Notes: Experience &amp; Research</h2>
         <p className="chapter-subtitle">Formal internships, research engagements, and leadership roles</p>
       </header>
 

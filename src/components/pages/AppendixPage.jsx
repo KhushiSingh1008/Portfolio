@@ -2,10 +2,10 @@ import React from 'react'
 
 export default function AppendixPage() {
   const certifications = [
-    { title: 'AWS Academy Graduate – Cloud Foundations', issuer: 'Amazon Web Services', date: 'Oct 2025' },
-    { title: 'Oracle Academy – Database Programming with SQL (90 hrs, 82%)', issuer: 'Oracle Academy', date: '2025–26' },
-    { title: 'Oracle Academy – Database Design (90 hrs, 96%)', issuer: 'Oracle Academy', date: '2025–26' },
-    { title: 'MathWorks Onramp Series – MATLAB, Machine Learning & Deep Learning', issuer: 'MathWorks', date: 'Feb 2026' }
+    { title: 'AWS Academy Graduate: Cloud Foundations', issuer: 'Amazon Web Services', date: 'Oct 2025' },
+    { title: 'Oracle Academy: Database Programming with SQL (90 hrs, 82%)', issuer: 'Oracle Academy', date: '2025-26' },
+    { title: 'Oracle Academy: Database Design (90 hrs, 96%)', issuer: 'Oracle Academy', date: '2025-26' },
+    { title: 'MathWorks Onramp Series: MATLAB, Machine Learning & Deep Learning', issuer: 'MathWorks', date: 'Feb 2026' }
   ]
 
   const achievements = [
@@ -18,8 +18,8 @@ export default function AppendixPage() {
   return (
     <div className="page-container animate-fade-in">
       <header className="chapter-header">
-        <span className="chapter-numeral">Chapter VI</span>
-        <h2 className="chapter-title">Appendix — Certifications &amp; Honors</h2>
+        <span className="chapter-numeral">Chapter V</span>
+        <h2 className="chapter-title">Appendix: Certifications &amp; Honors</h2>
         <p className="chapter-subtitle">Verified technical accreditations, hackathon titles, and awards</p>
       </header>
 

@@ -5,7 +5,7 @@ export default function MarginaliaPage() {
     <div className="page-container animate-fade-in">
       <header className="chapter-header">
         <span className="chapter-numeral">Chapter IV</span>
-        <h2 className="chapter-title">Marginalia — Notes in the Margins</h2>
+        <h2 className="chapter-title">Marginalia: Notes in the Margins</h2>
         <p className="chapter-subtitle">On bioinformatics, neuroscience, and the biological thread</p>
       </header>
 
@@ -15,7 +15,7 @@ export default function MarginaliaPage() {
         </p>
 
         <p>
-          I have long held a sustained curiosity for computational biology and neuroscience — specifically how algorithmic tools can parse the noise of complex organic datasets. Biological code evolved over eons with its own error-correction, proofreading, and consensus mechanisms.
+          I have long held a sustained curiosity for computational biology and neuroscience, specifically how algorithmic tools can parse the noise of complex organic datasets. Biological code evolved over eons with its own error-correction, proofreading, and consensus mechanisms.
         </p>
 
         {/* Handwritten Annotation Box */}
