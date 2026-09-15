@@ -1,51 +1,35 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+
+const chapterNames = [
+  'Cover',
+  'Prologue',
+  'The Work',
+  'Field Notes',
+  'Marginalia',
+  'Appendix',
+  'Contact'
+]
 
 export default function BookEngine({ children, activeIndex, setActiveIndex, totalPages }) {
-  const [turnDirection, setTurnDirection] = useState(null) // 'next' or 'prev'
-  const [isTransitioning, setIsTransitioning] = useState(false)
   const [touchStartX, setTouchStartX] = useState(null)
 
-  const chapterNames = [
-    'Cover',
-    'Prologue',
-    'The Work',
-    'Field Notes',
-    'Marginalia',
-    'Appendix',
-    'Contact'
-  ]
-
-  const turnPage = useCallback((newIndex, direction) => {
-    if (newIndex === activeIndex || isTransitioning) return
+  const goTo = useCallback((newIndex) => {
+    if (newIndex === activeIndex) return
     if (newIndex < 0 || newIndex >= totalPages) return
-
-    setTurnDirection(direction || (newIndex > activeIndex ? 'next' : 'prev'))
-    setIsTransitioning(true)
-
-    setTimeout(() => {
-      setActiveIndex(newIndex)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, 280)
-
-    setTimeout(() => {
-      setIsTransitioning(false)
-      setTurnDirection(null)
-    }, 650)
-  }, [activeIndex, isTransitioning, totalPages, setActiveIndex])
+    setActiveIndex(newIndex)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [activeIndex, totalPages, setActiveIndex])
 
   const goNext = useCallback(() => {
-    if (activeIndex < totalPages - 1) {
-      turnPage(activeIndex + 1, 'next')
-    }
-  }, [activeIndex, totalPages, turnPage])
+    if (activeIndex < totalPages - 1) goTo(activeIndex + 1)
+  }, [activeIndex, totalPages, goTo])
 
   const goPrev = useCallback(() => {
-    if (activeIndex > 0) {
-      turnPage(activeIndex - 1, 'prev')
-    }
-  }, [activeIndex, turnPage])
+    if (activeIndex > 0) goTo(activeIndex - 1)
+  }, [activeIndex, goTo])
 
-  // Keyboard Navigation (Arrow Keys)
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
@@ -57,43 +41,29 @@ export default function BookEngine({ children, activeIndex, setActiveIndex, tota
         goPrev()
       }
     }
-
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [goNext, goPrev])
 
-  // Mobile Touch Swipe Handling
-  const handleTouchStart = (e) => {
-    setTouchStartX(e.touches[0].clientX)
-  }
-
+  // Touch swipe
+  const handleTouchStart = (e) => setTouchStartX(e.touches[0].clientX)
   const handleTouchEnd = (e) => {
     if (touchStartX === null) return
-    const touchEndX = e.changedTouches[0].clientX
-    const diffX = touchStartX - touchEndX
-
-    if (Math.abs(diffX) > 50) {
-      if (diffX > 0) {
-        goNext()
-      } else {
-        goPrev()
-      }
+    const diff = touchStartX - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? goNext() : goPrev()
     }
     setTouchStartX(null)
   }
 
-  // Calculate dynamic stacked page thicknesses for left and right leaf bulk
-  const leftStackThickness = Math.max(3, Math.round((activeIndex / (totalPages - 1)) * 14))
-  const rightStackThickness = Math.max(3, Math.round(((totalPages - 1 - activeIndex) / (totalPages - 1)) * 14))
-
   return (
     <div className="app-container">
-      {/* Top Header / Bookmark Ribbon */}
+      {/* Minimal header */}
       <header className="site-header">
-        <button 
-          className="brand-mark" 
-          onClick={() => turnPage(0, 'prev')} 
-          style={{ background: 'none', border: 'none', textAlign: 'left' }}
+        <button
+          className="brand-mark"
+          onClick={() => goTo(0)}
+          style={{ textAlign: 'left' }}
         >
           <span className="brand-initial">K</span>
           <span>Khushi Singh</span>
@@ -105,10 +75,10 @@ export default function BookEngine({ children, activeIndex, setActiveIndex, tota
               <li key={idx}>
                 <button
                   className={`chapter-tab ${activeIndex === idx ? 'active' : ''}`}
-                  onClick={() => turnPage(idx)}
+                  onClick={() => goTo(idx)}
                 >
                   <span className="chap-num">
-                    {idx === 0 ? '' : idx === 6 ? 'Fin.' : `${idx}.`}
+                    {idx === 0 ? '' : idx === 6 ? 'fin.' : `${idx}.`}
                   </span>
                   {name}
                 </button>
@@ -118,98 +88,61 @@ export default function BookEngine({ children, activeIndex, setActiveIndex, tota
         </nav>
       </header>
 
-      {/* Persistent Fixed Side Arrow Navigation Affordances */}
+      {/* Side arrow navigation */}
       {activeIndex > 0 && (
-        <button 
-          className="nav-arrow-fixed nav-arrow-left" 
+        <button
+          className="nav-arrow-fixed nav-arrow-left"
           onClick={goPrev}
           aria-label="Previous Chapter"
-          title="Previous Chapter (←)"
+          title="Previous (←)"
         >
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 19L8 12L15 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M15 19L8 12L15 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
       )}
 
       {activeIndex < totalPages - 1 && (
-        <button 
-          className="nav-arrow-fixed nav-arrow-right" 
+        <button
+          className="nav-arrow-fixed nav-arrow-right"
           onClick={goNext}
           aria-label="Next Chapter"
-          title="Next Chapter (→)"
+          title="Next (→)"
         >
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
       )}
 
-      {/* 3D Book Viewport Stage */}
+      {/* Notebook */}
       <main className="book-stage">
-        {/* Outer Hardcover Frame containing the 3D Book Object */}
-        <div className="book-hardcover-wrapper">
-          {/* Stacked Pages Bulk (Left Side) */}
-          <div 
-            className="book-stack-left" 
-            style={{ width: `${leftStackThickness}px` }} 
-            aria-hidden="true" 
-          />
-
-          {/* Stacked Pages Bulk (Right Side) */}
-          <div 
-            className="book-stack-right" 
-            style={{ width: `${rightStackThickness}px` }} 
-            aria-hidden="true" 
-          />
-
-          {/* Main Book Surface Container */}
-          <div 
-            className="book-viewport"
+        <div className="notebook-wrapper">
+          <div
+            className="notebook-page"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
-            {/* Realistic Center Gutter Shadow Overlay */}
-            <div className="book-spine-gutter" aria-hidden="true" />
-            
-            {/* Page Spread Curvature Lighting */}
-            <div className="book-spread-lighting" aria-hidden="true" />
-
-            <div 
-              className={`page-turn-wrapper ${
-                turnDirection === 'next' ? 'page-turn-flip-next' : turnDirection === 'prev' ? 'page-turn-flip-prev' : ''
-              }`}
-            >
-              {/* Render active chapter component */}
-              {children}
-            </div>
-
-            {/* Page Corner Flip Affordances */}
-            {activeIndex < totalPages - 1 && (
-              <div 
-                className="corner-curl" 
-                onClick={goNext} 
-                title="Next Page (Click or press →)" 
-                aria-label="Turn to next page"
-              />
-            )}
-
-            {activeIndex > 0 && (
-              <div 
-                className="corner-curl corner-curl-prev" 
-                onClick={goPrev} 
-                title="Previous Page (Click or press ←)" 
-                aria-label="Turn to previous page"
-              />
-            )}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                className="page-transition-wrapper"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+              >
+                {children}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </main>
 
-      {/* Page Footer (Page Counter only) */}
-      <footer className="page-footer" style={{ padding: '1rem 4rem', justifyContent: 'center', border: 'none' }}>
+      {/* Page number */}
+      <footer className="page-footer">
         <div className="page-number">
-          Page {activeIndex + 1} of {totalPages}
+          {activeIndex + 1} / {totalPages}
         </div>
       </footer>
     </div>

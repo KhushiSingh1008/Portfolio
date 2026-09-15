@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import BookEngine from './components/BookEngine'
+import Scene3D from './components/Scene3D'
+import CustomCursor from './components/CustomCursor'
 
 import CoverPage from './components/pages/CoverPage'
 import ProloguePage from './components/pages/ProloguePage'
@@ -11,25 +13,14 @@ import ContactPage from './components/pages/ContactPage'
 
 export default function App() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-
   const TOTAL_PAGES = 7
-
-  const handleSelectChapter = (index) => {
-    if (index === activeIndex) return
-    setIsTransitioning(true)
-    setActiveIndex(index)
-    setTimeout(() => {
-      setIsTransitioning(false)
-    }, 650)
-  }
 
   const renderActivePage = () => {
     switch (activeIndex) {
       case 0:
-        return <CoverPage onOpenBook={() => handleSelectChapter(1)} />
+        return <CoverPage onOpenBook={() => setActiveIndex(1)} />
       case 1:
-        return <ProloguePage />
+        return <ProloguePage onNext={() => setActiveIndex(2)} />
       case 2:
         return <WorkPages />
       case 3:
@@ -39,15 +30,21 @@ export default function App() {
       case 5:
         return <AppendixPage />
       case 6:
-        return <ContactPage />
+        return <ContactPage onStartOver={() => setActiveIndex(0)} />
       default:
-        return <CoverPage onOpenBook={() => handleSelectChapter(1)} />
+        return <CoverPage onOpenBook={() => setActiveIndex(1)} />
     }
   }
 
   return (
     <>
-      {/* 3D Page Turning Book Engine */}
+      {/* 3D WebGL Atmospheric Background */}
+      <Scene3D />
+
+      {/* Smooth Custom Cursor */}
+      <CustomCursor />
+
+      {/* Notebook Engine */}
       <BookEngine
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}

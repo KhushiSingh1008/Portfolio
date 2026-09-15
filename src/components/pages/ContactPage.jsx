@@ -44,18 +44,18 @@ const contactItems = [
   }
 ]
 
-export default function ContactPage() {
+export default function ContactPage({ onStartOver }) {
   return (
-    <div className="page-container animate-fade-in" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '600px' }}>
-      <div style={{ maxWidth: '640px', margin: '0 auto', width: '100%' }}>
-        <header className="chapter-header" style={{ marginBottom: '2rem' }}>
+    <div className="page-container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '620px' }}>
+      <div style={{ maxWidth: '680px', margin: '0 auto', width: '100%' }}>
+        <header className="chapter-header" style={{ marginBottom: '1.75rem' }}>
           <span className="chapter-numeral">Fin</span>
-          <h2 className="chapter-title" style={{ fontSize: '2.5rem' }}>Closing &amp; Contact</h2>
-          <p className="chapter-subtitle">Open for research collaborations, engineering roles, and discussions</p>
+          <h2 className="chapter-title">Closing &amp; Correspondence</h2>
+          <p className="chapter-subtitle">Open for research fellowships, software engineering roles, and discussions</p>
         </header>
 
         <p className="lead-text">
-          Thank you for taking the time to read through this notebook. If you are working on decentralized infrastructure, biomedical machine learning, or simply want to converse about code and verse, I would love to connect.
+          Thank you for taking the time to read through this field journal. If you are exploring decentralized infrastructure, bioinformatics pipelines, or wish to exchange notes on systems and verse, please reach out.
         </p>
 
         <ul className="contact-list">
@@ -83,22 +83,35 @@ export default function ContactPage() {
                   <path d="M8.5 13.5h7M8.5 17h7" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
                 </svg>
               </span>
-              View resume
+              View curriculum vitae (HTML / PDF)
             </a>
           </li>
         </ul>
 
+        {/* Closing Poem Mark */}
         <div
           style={{
-            marginTop: '3.5rem',
+            marginTop: '3rem',
             textAlign: 'center',
             fontFamily: 'var(--font-script)',
             fontSize: '1.5rem',
-            color: 'var(--ink-blue-muted)'
+            color: 'var(--accent-sage)'
           }}
         >
-          "Building at the intersection of code, cells, and verse."
+          &ldquo;Building at the intersection of code, cells, and verse.&rdquo;
         </div>
+
+        {onStartOver && (
+          <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+            <button
+              onClick={onStartOver}
+              className="chapter-tab"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: 'var(--ink-light)', fontSize: '0.8rem' }}
+            >
+              <span>&larr; Return to Cover</span>
+            </button>
+          </div>
+        )}
 
       </div>
     </div>
