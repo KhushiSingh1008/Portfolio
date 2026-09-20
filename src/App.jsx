@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import BookEngine from './components/BookEngine'
 import Scene3D from './components/Scene3D'
 import CustomCursor from './components/CustomCursor'
@@ -39,7 +39,7 @@ export default function App() {
   return (
     <>
       {/* 3D WebGL Atmospheric Background */}
-      <Scene3D />
+      <Scene3D activeIndex={activeIndex} />
 
       {/* Smooth Custom Cursor */}
       <CustomCursor />

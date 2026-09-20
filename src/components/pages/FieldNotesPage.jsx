@@ -1,4 +1,3 @@
-import React from 'react'
 
 export default function FieldNotesPage() {
   const experiences = [
@@ -24,8 +23,8 @@ export default function FieldNotesPage() {
       ]
     },
     {
-      role: 'Graphics Head',
-      organization: 'VESLIT (VESIT Literary & Technical Society)',
+      role: 'Design Lead',
+      organization: 'VESLit Circle',
       period: '2024 — Present',
       domain: 'Visual Identity & Editorial Design',
       points: [
@@ -42,7 +41,7 @@ export default function FieldNotesPage() {
         <p className="chapter-subtitle">Research internships, clinical machine learning, and institutional leadership</p>
       </header>
 
-      <div style={{ maxWidth: '800px', position: 'relative', paddingLeft: '1.25rem' }}>
+      <div className="growth-timeline" style={{ maxWidth: '800px', position: 'relative', paddingLeft: '1.25rem' }}>
         {/* Subtle vertical journal stem / timeline */}
         <div style={{
           position: 'absolute',

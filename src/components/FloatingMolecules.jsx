@@ -1,42 +1,38 @@
-import { useRef, useMemo } from 'react'
+import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 
-function Mote({ position, speed, size }) {
+const colors = ['#89b5c7', '#ffc857', '#c58a9c']
+const motes = Array.from({ length: 18 }, (_, index) => ({
+  position: [Math.sin(index * 2.17) * 6.6, Math.cos(index * 1.41) * 4.4, -2 - (index % 5)],
+  speed: 0.08 + (index % 6) * 0.04,
+  size: 0.018 + (index % 5) * 0.011,
+  color: colors[index % colors.length],
+  offset: index * 0.91
+}))
+
+function Mote({ position, speed, size, color, offset, activeIndex }) {
   const ref = useRef()
-  const offset = useMemo(() => Math.random() * Math.PI * 2, [])
 
   useFrame((state) => {
     const t = state.clock.elapsedTime * speed + offset
-    ref.current.position.y = position[1] + Math.sin(t) * 0.4
-    ref.current.position.x = position[0] + Math.cos(t * 0.6) * 0.2
+    ref.current.position.y = position[1] + Math.sin(t) * (0.4 + activeIndex * 0.025)
+    ref.current.position.x = position[0] + Math.cos(t * 0.6) * (0.2 + activeIndex * 0.015)
     ref.current.position.z = position[2] + Math.sin(t * 0.4) * 0.15
   })
 
   return (
     <mesh ref={ref} position={position}>
       <sphereGeometry args={[size, 6, 6]} />
-      <meshBasicMaterial color="#b89a5a" transparent opacity={0.08} />
+      <meshBasicMaterial color={color} transparent opacity={0.28} />
     </mesh>
   )
 }
 
-export default function FloatingMolecules() {
-  const motes = useMemo(() => {
-    return Array.from({ length: 18 }, () => ({
-      position: [
-        (Math.random() - 0.5) * 14,
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 8 - 2
-      ],
-      speed: Math.random() * 0.25 + 0.08,
-      size: Math.random() * 0.04 + 0.015
-    }))
-  }, [])
-
+export default function FloatingMolecules({ activeIndex = 0 }) {
   return (
     <group>
       {motes.map((m, i) => (
-        <Mote key={i} {...m} />
+        <Mote key={i} {...m} activeIndex={activeIndex} />
       ))}
     </group>
   )

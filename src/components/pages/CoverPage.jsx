@@ -1,8 +1,7 @@
-import React from 'react'
 
 export default function CoverPage({ onOpenBook }) {
   return (
-    <div className="page-container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '620px', textAlign: 'center' }}>
+    <div className="page-container cover-page" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '620px', textAlign: 'center' }}>
       
       {/* Top Journal Plate Header */}
       <div style={{
@@ -17,12 +16,12 @@ export default function CoverPage({ onOpenBook }) {
         gap: '0.75rem',
       }}>
         <span style={{ width: '28px', height: '1px', background: 'var(--accent-gold)', opacity: 0.5 }}></span>
-        <span>Field Journal &bull; Codex 01</span>
+        <span>Field Journal &bull; Volume 01</span>
         <span style={{ width: '28px', height: '1px', background: 'var(--accent-gold)', opacity: 0.5 }}></span>
       </div>
 
       {/* Handcrafted Biological & Engineering Seal */}
-      <div style={{ marginBottom: '2.25rem', position: 'relative' }}>
+      <div className="cover-seal" style={{ marginBottom: '2.25rem', position: 'relative' }}>
         <svg width="88" height="88" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transition: 'transform 0.6s var(--ease-smooth)' }}>
           {/* Outer coordinate ring */}
           <circle cx="44" cy="44" r="41" stroke="#d4c4a8" strokeWidth="1" strokeDasharray="3 3" />
@@ -103,7 +102,7 @@ export default function CoverPage({ onOpenBook }) {
         </button>
 
         <a
-          href="/resume.html"
+          href="/resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="cta-button"

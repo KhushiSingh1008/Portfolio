@@ -1,4 +1,3 @@
-import React from 'react'
 
 const contactItems = [
   {
@@ -58,7 +57,7 @@ export default function ContactPage({ onStartOver }) {
           Thank you for taking the time to read through this field journal. If you are exploring decentralized infrastructure, bioinformatics pipelines, or wish to exchange notes on systems and verse, please reach out.
         </p>
 
-        <ul className="contact-list">
+        <ul className="contact-list neural-contact-list">
           {contactItems.map((item) => (
             <li className="contact-item" key={item.label}>
               <span className="contact-label">{item.label}</span>
@@ -76,14 +75,14 @@ export default function ContactPage({ onStartOver }) {
 
           <li className="contact-item">
             <span className="contact-label">RESUME</span>
-            <a href="/resume.html" target="_blank" rel="noopener noreferrer" className="contact-value">
+            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="contact-value">
               <span className="contact-icon">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M7 3.5h7l5 5V18a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2Zm7 1.5V9h4" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M8.5 13.5h7M8.5 17h7" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
                 </svg>
               </span>
-              View curriculum vitae (HTML / PDF)
+              View curriculum vitae (PDF)
             </a>
           </li>
         </ul>
