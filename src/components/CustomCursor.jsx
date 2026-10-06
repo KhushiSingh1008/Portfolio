@@ -1,107 +1,120 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
+const TRAIL = 8
+const INTERACTIVE = 'a, button, [role="button"], input, textarea, select, label, .interactive'
+
+// A neuron cursor: a glowing soma at the pointer, a lagging ring of dendrites,
+// an axon trail of fading signal dots, and an action-potential ripple on click.
+// Hovering a 3D neuron shows its name next to the cursor.
 export default function CustomCursor() {
-  const dotRef = useRef(null)
+  const rootRef = useRef(null)
+  const somaRef = useRef(null)
   const ringRef = useRef(null)
-  const [hovering, setHovering] = useState(false)
-  const [pressed, setPressed] = useState(false)
-  const [visible, setVisible] = useState(false)
-  const mousePos = useRef({ x: 0, y: 0 })
-  const ringPos = useRef({ x: 0, y: 0 })
-  const rafId = useRef(null)
+  const labelRef = useRef(null)
+  const trailRefs = useRef([])
 
   useEffect(() => {
-    // Skip on touch devices
-    if ('ontouchstart' in window && !window.matchMedia('(hover: hover)').matches) return
-
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)')
+    if (!fine.matches) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const root = rootRef.current
     document.body.classList.add('cursor-active')
 
-    const handleMouseMove = (e) => {
-      mousePos.current.x = e.clientX
-      mousePos.current.y = e.clientY
+    const mouse = { x: -100, y: -100 }
+    const ring = { x: -100, y: -100 }
+    const trail = Array.from({ length: TRAIL }, () => ({ x: -100, y: -100 }))
+    let neuronHover = false
+    let raf
 
-      if (dotRef.current) {
-        dotRef.current.style.left = e.clientX + 'px'
-        dotRef.current.style.top = e.clientY + 'px'
+    const setFlag = (name, on) => root.classList.toggle(name, on)
+
+    const onMove = (e) => {
+      mouse.x = e.clientX
+      mouse.y = e.clientY
+      setFlag('visible', true)
+    }
+    const onOver = (e) => setFlag('hovering', neuronHover || Boolean(e.target.closest?.(INTERACTIVE)))
+    const onDown = (e) => {
+      setFlag('pressed', true)
+      const ripple = document.createElement('span')
+      ripple.className = 'cursor-ripple'
+      ripple.style.left = `${e.clientX}px`
+      ripple.style.top = `${e.clientY}px`
+      root.appendChild(ripple)
+      ripple.addEventListener('animationend', () => ripple.remove())
+    }
+    const onUp = () => setFlag('pressed', false)
+    const onLeave = () => setFlag('visible', false)
+    const onNeuron = (e) => {
+      neuronHover = Boolean(e.detail)
+      setFlag('hovering', neuronHover)
+      setFlag('labelled', neuronHover)
+      if (e.detail) {
+        labelRef.current.textContent = e.detail.label
+        root.style.setProperty('--cursor-c', e.detail.color)
+      } else {
+        root.style.removeProperty('--cursor-c')
       }
-
-      if (!visible) setVisible(true)
     }
 
-    const handleMouseOver = (e) => {
-      if (e.target.closest('a, button, [role="button"], input, textarea, .interactive')) {
-        setHovering(true)
-      }
+    const tick = () => {
+      const k = reduced ? 1 : 0.16
+      ring.x += (mouse.x - ring.x) * k
+      ring.y += (mouse.y - ring.y) * k
+      somaRef.current.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0)`
+      ringRef.current.style.transform = `translate3d(${ring.x}px, ${ring.y}px, 0)`
+      labelRef.current.style.transform = `translate3d(${ring.x + 26}px, ${ring.y + 18}px, 0)`
+      let lead = mouse
+      trail.forEach((p, i) => {
+        p.x += (lead.x - p.x) * 0.38
+        p.y += (lead.y - p.y) * 0.38
+        const el = trailRefs.current[i]
+        if (el) el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0) scale(${1 - i / TRAIL})`
+        lead = p
+      })
+      raf = requestAnimationFrame(tick)
     }
+    raf = requestAnimationFrame(tick)
 
-    const handleMouseOut = (e) => {
-      if (e.target.closest('a, button, [role="button"], input, textarea, .interactive')) {
-        setHovering(false)
-      }
-    }
-
-    const handleMouseLeave = () => setVisible(false)
-    const handleMouseEnter = () => setVisible(true)
-    const handleMouseDown = () => setPressed(true)
-    const handleMouseUp = () => setPressed(false)
-
-    window.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseover', handleMouseOver)
-    document.addEventListener('mouseout', handleMouseOut)
-    document.documentElement.addEventListener('mouseleave', handleMouseLeave)
-    document.documentElement.addEventListener('mouseenter', handleMouseEnter)
-    window.addEventListener('mousedown', handleMouseDown)
-    window.addEventListener('mouseup', handleMouseUp)
-
-    const animate = () => {
-      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.12
-      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.12
-      if (ringRef.current) {
-        ringRef.current.style.left = ringPos.current.x + 'px'
-        ringRef.current.style.top = ringPos.current.y + 'px'
-      }
-      rafId.current = requestAnimationFrame(animate)
-    }
-    rafId.current = requestAnimationFrame(animate)
+    window.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseover', onOver)
+    window.addEventListener('mousedown', onDown)
+    window.addEventListener('mouseup', onUp)
+    document.documentElement.addEventListener('mouseleave', onLeave)
+    window.addEventListener('neuron-hover', onNeuron)
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseover', handleMouseOver)
-      document.removeEventListener('mouseout', handleMouseOut)
-      document.documentElement.removeEventListener('mouseleave', handleMouseLeave)
-      document.documentElement.removeEventListener('mouseenter', handleMouseEnter)
-      window.removeEventListener('mousedown', handleMouseDown)
-      window.removeEventListener('mouseup', handleMouseUp)
+      cancelAnimationFrame(raf)
+      window.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseover', onOver)
+      window.removeEventListener('mousedown', onDown)
+      window.removeEventListener('mouseup', onUp)
+      document.documentElement.removeEventListener('mouseleave', onLeave)
+      window.removeEventListener('neuron-hover', onNeuron)
       document.body.classList.remove('cursor-active')
-      if (rafId.current) cancelAnimationFrame(rafId.current)
     }
-  }, [visible])
+  }, [])
 
   return (
-    <>
-      <div
-        ref={dotRef}
-        className={`cursor-dot${visible ? ' visible' : ''}${hovering ? ' hovering' : ''}${pressed ? ' pressed' : ''}`}
-      >
-        <svg viewBox="0 0 52 78" aria-hidden="true">
-          <defs>
-            <linearGradient id="feather-gold" x1="0" x2="1" y1="0" y2="1">
-              <stop stopColor="#fff1bf" /><stop offset=".28" stopColor="#ffc857" /><stop offset=".7" stopColor="#b97432" /><stop offset="1" stopColor="#5b3625" />
-            </linearGradient>
-          </defs>
-          <path className="feather-body" d="M40 4C24 6 9 22 8 44c-1 11 2 18 9 21l13-12 13-34c3-7 2-12-3-15Z" />
-          <path className="feather-spine" d="M12 70C20 51 29 32 40 7" />
-          <g className="feather-barbs">
-            <path d="m35 13-13 4M37 17 17 24M36 22 13 33M33 29 10 42M30 36 9 51M26 44 11 59M23 50 14 64" />
-            <path d="m38 13 3 7M34 22l8 5M30 30l8 5M26 38l6 7M22 47l4 7" />
+    <div ref={rootRef} className="cursor" aria-hidden="true">
+      {Array.from({ length: TRAIL }, (_, i) => (
+        <span key={i} ref={(el) => (trailRefs.current[i] = el)} className="cursor-trail" style={{ opacity: 0.5 * (1 - i / TRAIL) }} />
+      ))}
+      <div ref={ringRef} className="cursor-ring">
+        <svg viewBox="-30 -30 60 60">
+          <circle r="11" className="membrane" />
+          <g className="dendrites">
+            {[0, 60, 120, 180, 240, 300].map((deg) => (
+              <g key={deg} transform={`rotate(${deg})`}>
+                <path d="M0 -11 L0 -19 M0 -16 L-4 -21 M0 -18 L3 -24" />
+                <circle cy="-24" cx="3" r="1.3" />
+              </g>
+            ))}
           </g>
-          <path className="feather-tip" d="m12 69-5 8" />
         </svg>
       </div>
-      <div
-        ref={ringRef}
-        className={`cursor-ring${visible ? ' visible' : ''}${hovering ? ' hovering' : ''}${pressed ? ' pressed' : ''}`}
-      />
-    </>
+      <div ref={somaRef} className="cursor-soma" />
+      <div ref={labelRef} className="cursor-label" />
+    </div>
   )
 }
