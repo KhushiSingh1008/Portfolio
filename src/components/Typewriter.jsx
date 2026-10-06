@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { SECTIONS } from '../data/sections'
 import { sound } from '../lib/sound'
@@ -18,32 +18,37 @@ export default function Typewriter({ command, activeId, onKey, onHome, reduced }
     document.fonts?.load('50px "Special Elite"').then(() => engine.redraw(), () => {})
   }, [engine])
 
+  // The current typing job lives in a ref so an effect re-run (React StrictMode
+  // in development) resumes it instead of printing the command twice.
+  const job = useRef(null)
+
   useEffect(() => {
     if (!command) return
-    let i = 0
-    let done = false
-    const finish = () => {
-      if (done) return
-      done = true
-      while (i < command.text.length) engine.strike(command.text[i++])
+    const finish = (j) => {
+      if (j.done) return
+      j.done = true
+      while (j.i < j.cmd.text.length) engine.strike(j.cmd.text[j.i++])
       engine.carriageReturn()
-      command.output.forEach((line) => engine.print(line))
-      setLive(`${command.text}. ${command.output.join(' ')}`)
+      j.cmd.output.forEach((line) => engine.print(line))
+      setLive(`${j.cmd.text}. ${j.cmd.output.join(' ')}`)
     }
+    let j = job.current
+    if (!j || j.cmd !== command) {
+      if (j) finish(j) // a newer command arrived: flush the unfinished one
+      j = job.current = { cmd: command, i: 0, done: false }
+    }
+    if (j.done) return
     const timer = setInterval(
       () => {
-        if (i < command.text.length) engine.strike(command.text[i++])
-        if (i >= command.text.length) {
+        if (j.i < command.text.length) engine.strike(command.text[j.i++])
+        if (j.i >= command.text.length) {
           clearInterval(timer)
-          finish()
+          finish(j)
         }
       },
       reduced ? 1 : 62,
     )
-    return () => {
-      clearInterval(timer)
-      finish()
-    }
+    return () => clearInterval(timer)
   }, [command, engine, reduced])
 
   return (
@@ -60,7 +65,7 @@ export default function Typewriter({ command, activeId, onKey, onHome, reduced }
             key={s.id}
             type="button"
             className={`tw-chip${activeId === s.id ? ' active' : ''}`}
-            style={{ '--c': s.color }}
+            style={{ '--c': s.color, '--k': s.ink }}
             onClick={() => onKey(s.key)}
             aria-label={`${s.label} (press ${s.key.toUpperCase()})`}
             title={s.label}

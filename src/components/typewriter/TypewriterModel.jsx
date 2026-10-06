@@ -18,29 +18,31 @@ const SECTION_BY_KEY = Object.fromEntries(SECTIONS.map((s) => [s.key.toUpperCase
 
 /* ---------- textures ---------- */
 
-function keyTexture(label, accent) {
+// Cream key cap with an ink letter; section keys get a pastel ring and their ink colour.
+function keyTexture(label, section) {
   const c = document.createElement('canvas')
   c.width = c.height = 128
   const g = c.getContext('2d')
-  const grad = g.createRadialGradient(54, 50, 6, 64, 64, 64)
-  grad.addColorStop(0, '#3a3a3c')
-  grad.addColorStop(1, '#0d0d0e')
+  const grad = g.createRadialGradient(54, 48, 6, 64, 64, 64)
+  grad.addColorStop(0, '#fffaf0')
+  grad.addColorStop(0.75, '#f1e7d3')
+  grad.addColorStop(1, '#d9ccb2')
   g.fillStyle = grad
   g.beginPath()
   g.arc(64, 64, 64, 0, Math.PI * 2)
   g.fill()
-  g.fillStyle = accent ?? '#f2efe8'
-  g.font = `600 ${label.length > 1 ? 34 : 60}px Inter, Arial, sans-serif`
+  if (section) {
+    g.fillStyle = section.color
+    g.beginPath()
+    g.arc(64, 64, 58, 0, Math.PI * 2)
+    g.arc(64, 64, 46, 0, Math.PI * 2, true)
+    g.fill()
+  }
+  g.fillStyle = section?.ink ?? '#2b2540'
+  g.font = `700 ${label.length > 1 ? 34 : 58}px Inter, Arial, sans-serif`
   g.textAlign = 'center'
   g.textBaseline = 'middle'
   g.fillText(label, 64, 68)
-  if (accent) {
-    g.strokeStyle = accent
-    g.lineWidth = 6
-    g.beginPath()
-    g.arc(64, 64, 56, 0, Math.PI * 2)
-    g.stroke()
-  }
   const t = new THREE.CanvasTexture(c)
   t.colorSpace = THREE.SRGBColorSpace
   return t
@@ -51,14 +53,14 @@ function spoolTexture() {
   c.width = c.height = 256
   const g = c.getContext('2d')
   const grad = g.createRadialGradient(110, 100, 10, 128, 128, 128)
-  grad.addColorStop(0, '#f4f5f7')
-  grad.addColorStop(0.6, '#a9adb3')
-  grad.addColorStop(1, '#6d7178')
+  grad.addColorStop(0, '#fbf3e4')
+  grad.addColorStop(0.6, '#e2cfa8')
+  grad.addColorStop(1, '#b49a6e')
   g.fillStyle = grad
   g.beginPath()
   g.arc(128, 128, 128, 0, Math.PI * 2)
   g.fill()
-  g.fillStyle = '#16171a'
+  g.fillStyle = '#2b2540'
   for (let i = 0; i < 6; i++) {
     const a = (i / 6) * Math.PI * 2
     g.beginPath()
@@ -68,7 +70,7 @@ function spoolTexture() {
   g.beginPath()
   g.arc(128, 128, 18, 0, Math.PI * 2)
   g.fill()
-  g.fillStyle = '#c9ccd1'
+  g.fillStyle = '#f1e2c2'
   g.beginPath()
   g.arc(128, 128, 9, 0, Math.PI * 2)
   g.fill()
@@ -82,9 +84,9 @@ function scaleTexture() {
   c.width = 1024
   c.height = 48
   const g = c.getContext('2d')
-  g.fillStyle = '#121214'
+  g.fillStyle = '#211510'
   g.fillRect(0, 0, 1024, 48)
-  g.fillStyle = '#e8e4da'
+  g.fillStyle = '#f1e2c2'
   g.font = '16px Inter, Arial, sans-serif'
   g.textAlign = 'center'
   for (let i = 0; i <= 90; i++) {
@@ -103,15 +105,17 @@ function scaleTexture() {
 function useMaterials() {
   return useMemo(
     () => ({
-      silver: new THREE.MeshStandardMaterial({ color: '#b9bdc3', metalness: 0.55, roughness: 0.32 }),
-      silverDark: new THREE.MeshStandardMaterial({ color: '#8d9198', metalness: 0.6, roughness: 0.38 }),
-      black: new THREE.MeshStandardMaterial({ color: '#1a1b1e', metalness: 0.35, roughness: 0.45 }),
-      cavity: new THREE.MeshStandardMaterial({ color: '#0b0b0c', metalness: 0.2, roughness: 0.8 }),
-      chrome: new THREE.MeshStandardMaterial({ color: '#e6e8eb', metalness: 1, roughness: 0.12 }),
-      steel: new THREE.MeshStandardMaterial({ color: '#4a4d52', metalness: 0.85, roughness: 0.3 }),
-      rubber: new THREE.MeshStandardMaterial({ color: '#141415', metalness: 0, roughness: 0.85 }),
-      keyCap: new THREE.MeshStandardMaterial({ color: '#111113', metalness: 0.2, roughness: 0.35 }),
-      ribbon: new THREE.MeshStandardMaterial({ color: '#2a0f10', roughness: 0.7 }),
+      // Chocolate-brown enamel body, near-black brown carriage, champagne-gold trim;
+      // the cream keys and pastel rings carry the contrast against the dark page.
+      silver: new THREE.MeshStandardMaterial({ color: '#5a3a2a', metalness: 0.18, roughness: 0.32 }),
+      silverDark: new THREE.MeshStandardMaterial({ color: '#45291d', metalness: 0.2, roughness: 0.36 }),
+      black: new THREE.MeshStandardMaterial({ color: '#211510', metalness: 0.25, roughness: 0.4 }),
+      cavity: new THREE.MeshStandardMaterial({ color: '#120b08', metalness: 0.1, roughness: 0.85 }),
+      chrome: new THREE.MeshStandardMaterial({ color: '#ecd9b4', metalness: 0.9, roughness: 0.22 }),
+      steel: new THREE.MeshStandardMaterial({ color: '#a08670', metalness: 0.7, roughness: 0.32 }),
+      rubber: new THREE.MeshStandardMaterial({ color: '#170f0b', metalness: 0, roughness: 0.85 }),
+      keyCap: new THREE.MeshStandardMaterial({ color: '#efe5d1', metalness: 0, roughness: 0.45 }),
+      ribbon: new THREE.MeshStandardMaterial({ color: '#6b3550', roughness: 0.7 }),
     }),
     [],
   )
@@ -128,9 +132,9 @@ function Key({ label, position, engine, mats, onPress }) {
   const group = useRef()
   const [hover, setHover] = useState(false)
   const section = SECTION_BY_KEY[label]
-  const texture = useMemo(() => keyTexture(label, section?.color), [label, section])
+  const texture = useMemo(() => keyTexture(label, section), [label, section])
   const rimMat = useMemo(
-    () => (section ? new THREE.MeshStandardMaterial({ color: section.color, emissive: section.color, emissiveIntensity: 0.6, metalness: 0.6, roughness: 0.25 }) : null),
+    () => (section ? new THREE.MeshStandardMaterial({ color: section.color, emissive: section.color, emissiveIntensity: 0.35, metalness: 0.4, roughness: 0.3 }) : null),
     [section],
   )
 
@@ -278,9 +282,11 @@ function Carriage({ engine, mats, onHome }) {
 
   useFrame((_, delta) => {
     const dt = Math.min(delta, 0.1)
-    const target = -engine.carriageFraction() * PAPER_W
+    // Keep the paper centred: glide left a little while typing, then ease back.
+    const typing = now() - engine.lastStrikeAt() < 0.9
+    const target = typing ? -engine.lineProgress() * PAPER_W * 0.3 : 0
     const sinceReturn = now() - engine.returnAt()
-    const k = 1 - Math.exp(-dt * (sinceReturn < 0.6 ? 7 : 28))
+    const k = 1 - Math.exp(-dt * (typing ? 24 : 5))
     carriage.current.position.x += (target - carriage.current.position.x) * k
     const roll = engine.lineFeeds() * 0.42
     platen.current.rotation.x += (roll - platen.current.rotation.x) * (1 - Math.exp(-dt * 10))

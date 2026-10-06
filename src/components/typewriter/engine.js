@@ -145,9 +145,10 @@ export function createEngine() {
     returnAt: () => lastReturn,
     lineFeeds: () => lineFeeds,
 
-    // Carriage offset as a fraction of paper width: 0 means the next
-    // character lands at the centre of the paper.
-    carriageFraction: () => (MARGIN_X + current.length * charWidth) / W - 0.5,
+    // How far along the current line the next character is, as a fraction
+    // of paper width (0 at the left margin).
+    lineProgress: () => (current.length * charWidth) / W,
+    lastStrikeAt: () => pressed.get('__any__') ?? -10,
   }
 
   draw()

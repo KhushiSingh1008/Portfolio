@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Khushi Singh — neural.portfolio
+   Khushi Singh · neural.portfolio
    A 3D neural network: each neuron holds one section of the portfolio.
    ========================================================================== */
 
@@ -352,30 +352,34 @@ kbd {
   border-radius: 50%;
   font-family: var(--font-mono);
   font-size: 0.74rem;
-  font-weight: 500;
-  color: var(--c, #e7e4dc);
-  background: radial-gradient(circle at 40% 35%, #3a3a3d, #0d0d0f 70%);
-  border: 2px solid #c9cdd2;
-  box-shadow: 0 3px 0 #050506, 0 4px 10px rgba(0, 0, 0, 0.5);
+  font-weight: 700;
+  color: var(--k, #2b2540);
+  background: radial-gradient(circle at 40% 35%, #fffaf0, #efe5d1 65%, #d9ccb2);
+  border: 2px solid var(--c, #ecd9b4);
+  box-shadow: 0 3px 0 #45291d, 0 4px 10px rgba(0, 0, 0, 0.45);
   transition: transform 0.12s var(--ease), box-shadow 0.12s, border-color 0.2s;
 }
 
 .tw-chip:hover,
 .tw-chip.active {
   border-color: var(--c, #fff);
-  box-shadow: 0 3px 0 #050506, 0 0 14px color-mix(in srgb, var(--c, #fff) 55%, transparent);
+  box-shadow: 0 3px 0 #45291d, 0 0 14px color-mix(in srgb, var(--c, #fff) 60%, transparent);
 }
 
 .tw-chip:active {
   transform: translateY(3px);
-  box-shadow: 0 0 0 #050506;
+  box-shadow: 0 0 0 #6f6290;
 }
 
 .tw-chip.ghost {
   width: auto;
   padding: 0 10px;
   border-radius: 15px;
-  color: var(--ink-dim);
+  font-weight: 500;
+  color: var(--ink);
+  background: rgba(196, 181, 253, 0.14);
+  border-color: rgba(196, 181, 253, 0.45);
+  box-shadow: 0 3px 0 rgba(43, 37, 64, 0.9);
 }
 
 .tw-chip.sound {

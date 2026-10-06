@@ -140,7 +140,7 @@ export default function App() {
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
           >
-            <p className="eyebrow accent">IT engineer · VESIT Mumbai · CGPA 9.91</p>
+            <p className="eyebrow accent">IT engineer · VESIT Mumbai · CGPA 9.92</p>
             <h1>
               Khushi
               <br />

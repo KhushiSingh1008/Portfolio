@@ -1,5 +1,5 @@
 export const stats = [
-  { label: 'Academic record', value: 'VESIT, Mumbai', detail: 'B.E. Information Technology · CGPA 9.91 / 10' },
+  { label: 'Academic record', value: 'VESIT, Mumbai', detail: 'B.E. Information Technology · CGPA 9.92 / 10' },
   { label: 'Core domains', value: 'Bioinformatics & Bio-AI', detail: 'Cellular automata, neural vision, genomics pipelines' },
   { label: 'Infrastructure', value: 'Web3 & Cryptography', detail: 'Account abstraction, ZK proofs, Solidity & Rust' },
 ]

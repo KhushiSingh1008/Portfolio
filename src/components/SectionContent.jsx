@@ -4,7 +4,7 @@ function About() {
   return (
     <>
       <p className="lede">
-        I am a third-year B.E. Information Technology student at VESIT, Mumbai, with a CGPA of <strong>9.91 / 10</strong> through
+        I am a third-year B.E. Information Technology student at VESIT, Mumbai, with a CGPA of <strong>9.92 / 10</strong> through
         Semester 6. My work sits where distributed systems, artificial intelligence and biological computing meet.
       </p>
       <p>
@@ -165,7 +165,7 @@ function Resume() {
         <span className="badge">B.E.</span>
         <div>
           <strong>Information Technology, VESIT Mumbai</strong>
-          <span className="dim">CGPA 9.91 / 10 through Semester 6</span>
+          <span className="dim">CGPA 9.92 / 10 through Semester 6</span>
         </div>
       </div>
       <h5 className="sub">Skills</h5>
