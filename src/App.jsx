@@ -153,10 +153,10 @@ export default function App() {
               Every neuron holds one chapter of my notebook. Click one, or type its key on the typewriter.
             </p>
             <div className="hero-tags">
-              <span style={{ '--c': '#5eead4' }}>Bio-AI</span>
-              <span style={{ '--c': '#a78bfa' }}>Web3 & ZK</span>
-              <span style={{ '--c': '#60a5fa' }}>Systems</span>
-              <span style={{ '--c': '#f472b6' }}>Poetry</span>
+              <span style={{ '--c': '#9ee6cf' }}>Bio-AI</span>
+              <span style={{ '--c': '#c4b5fd' }}>Web3 & ZK</span>
+              <span style={{ '--c': '#a5c8f5' }}>Systems</span>
+              <span style={{ '--c': '#f5b3cf' }}>Poetry</span>
             </div>
           </motion.section>
         )}

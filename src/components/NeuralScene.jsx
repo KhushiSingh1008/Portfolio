@@ -59,9 +59,10 @@ const somaFragment = /* glsl */ `
   varying float vDisp;
   void main() {
     float fres = pow(1.0 - max(dot(vN, vView), 0.0), 2.2);
-    vec3 col = uColor * 0.16 + uColor * fres * 1.7 + vec3(1.0) * fres * fres * 0.35;
-    col += uColor * max(vDisp, 0.0) * 4.0;
-    col += mix(uColor, vec3(1.0), 0.4) * uFire * 0.8;
+    // Pastel palette: keep multipliers near 1 so hues don't wash out to white.
+    vec3 col = uColor * 0.22 + uColor * fres * 1.1 + vec3(1.0) * fres * fres * 0.15;
+    col += uColor * max(vDisp, 0.0) * 2.5;
+    col += uColor * uFire * 0.55;
     float a = (0.5 + fres * 0.5);
     gl_FragColor = vec4(col * mix(1.0, 0.35, uDim), a * mix(1.0, 0.5, uDim));
   }
@@ -433,7 +434,7 @@ function Field() {
     <group>
       <points geometry={points} material={material} />
       <lineSegments geometry={lines}>
-        <lineBasicMaterial color="#5b7bd5" transparent opacity={0.09} blending={THREE.AdditiveBlending} depthWrite={false} />
+        <lineBasicMaterial color="#b9a8e8" transparent opacity={0.08} blending={THREE.AdditiveBlending} depthWrite={false} />
       </lineSegments>
     </group>
   )
