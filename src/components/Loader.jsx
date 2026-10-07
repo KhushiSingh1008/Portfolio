@@ -6,6 +6,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 const BLOCKS = ['#9ee6cf', '#c4b5fd', '#a5c8f5', '#f5b3cf', '#f6dc8f', '#f9c09f']
 const NAME = 'KHUSHI SINGH'
+// Each word with the index of its first letter in NAME (letters keep their NAME index).
+const WORDS = NAME.split(' ').map((word, w, all) => ({ word, start: all.slice(0, w).join(' ').length + (w ? 1 : 0) }))
 const HEX = '0123456789ABCDEF'
 const STAGES = ['mining genesis block', 'hashing transactions', 'linking blocks', 'verifying proofs', 'syncing ledger', 'network online']
 
@@ -84,15 +86,20 @@ export default function Loader({ onDone, reduced }) {
 
           {/* Proof-of-work decode: the name resolves out of scrambling hex as blocks are mined. */}
           <h1 className="decode" aria-label={NAME}>
-            {[...NAME].map((ch, i) => {
-              if (ch === ' ') return <span key={i} className="decode-gap" />
-              const locked = i < resolved
-              return (
-                <span key={i} className={locked ? 'locked' : 'scramble'} style={{ '--c': BLOCKS[i % BLOCKS.length] }} aria-hidden="true">
-                  {locked ? ch : HEX[parseInt(hexHash(count * 13 + i * 7, 1), 16)]}
-                </span>
-              )
-            })}
+            {/* Letters are grouped per word so narrow screens wrap at the space, never mid-word. */}
+            {WORDS.map(({ word, start }, w) => (
+              <span key={w} className="decode-word">
+                {[...word].map((ch, j) => {
+                  const i = start + j
+                  const locked = i < resolved
+                  return (
+                    <span key={i} className={locked ? 'locked' : 'scramble'} style={{ '--c': BLOCKS[i % BLOCKS.length] }} aria-hidden="true">
+                      {locked ? ch : HEX[parseInt(hexHash(count * 13 + i * 7, 1), 16)]}
+                    </span>
+                  )
+                })}
+              </span>
+            ))}
           </h1>
 
           <p className="pow" aria-hidden="true">

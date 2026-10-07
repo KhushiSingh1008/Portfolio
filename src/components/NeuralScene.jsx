@@ -194,6 +194,7 @@ function Soma({ node, active, dimmed, fires, onSelect }) {
       }),
     [node],
   )
+  const coreColor = useMemo(() => new THREE.Color(node.color).lerp(new THREE.Color('#ffffff'), 0.6), [node])
 
   useFrame((state, dt) => {
     const t = state.clock.elapsedTime
@@ -234,7 +235,7 @@ function Soma({ node, active, dimmed, fires, onSelect }) {
       </mesh>
       <mesh>
         <sphereGeometry args={[node.size * 0.32, 20, 20]} />
-        <meshBasicMaterial color={new THREE.Color(node.color).lerp(new THREE.Color('#ffffff'), 0.6)} transparent opacity={0.9} />
+        <meshBasicMaterial color={coreColor} transparent opacity={0.9} />
       </mesh>
       <sprite ref={halo}>
         <spriteMaterial map={getGlowTexture()} color={node.color} blending={THREE.AdditiveBlending} depthWrite={false} transparent />
@@ -282,6 +283,8 @@ function Axons({ axons, activeId }) {
 
 const MAX_POINTS = 240
 const TAIL = 3
+// Shared, read-only pulse colours so ambient firing doesn't allocate every spawn.
+const NODE_COLORS = Object.fromEntries(NODES.map((n) => [n.id, new THREE.Color(n.color)]))
 
 function Pulses({ axons, signal, fires, reduced }) {
   const material = useMemo(() => makePointMaterial(0), [])
@@ -340,7 +343,7 @@ function Pulses({ axons, signal, fires, reduced }) {
         speed: 0.25 + Math.random() * 0.35,
         delay: 0,
         size: 0.7,
-        color: new THREE.Color(nodeById(dir > 0 ? ax.b : ax.a).color),
+        color: NODE_COLORS[dir > 0 ? ax.b : ax.a],
         arrive: null,
       })
     }
@@ -494,7 +497,7 @@ export default function NeuralScene({ activeId, signal, onSelect, compact, reduc
     <Canvas
       className="neural-canvas"
       camera={{ position: [0, 8, 38], fov: 50, near: 0.1, far: 120 }}
-      dpr={[1, 1.75]}
+      dpr={[1, 1.5]}
       gl={{ antialias: true, alpha: true }}
     >
       <CameraRig activeId={activeId} compact={compact} reduced={reduced} />

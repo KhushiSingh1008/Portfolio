@@ -422,7 +422,9 @@ export default function TypewriterModel({ engine, onKey, onHome }) {
         <SpaceBar engine={engine} mats={mats} onPress={press} />
         <Carriage engine={engine} mats={mats} onHome={onHome} />
       </group>
-      <ContactShadows position={[0, -0.01, 0.1]} opacity={0.55} scale={7} blur={2.4} far={2} />
+      {/* The machine only bobs a few millimetres, so bake the shadow once instead of
+          re-rendering and blurring the whole model into it every frame. */}
+      <ContactShadows frames={1} position={[0, -0.01, 0.1]} opacity={0.55} scale={7} blur={2.4} far={2} />
     </>
   )
 }

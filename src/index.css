@@ -286,9 +286,10 @@ kbd {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--ink);
-  background: rgba(5, 8, 18, 0.62);
+  /* No backdrop-filter: these labels move every frame over the live canvas,
+     so a blur would be recomputed for each of them on every frame. */
+  background: rgba(5, 8, 18, 0.78);
   border: 1px solid color-mix(in srgb, var(--c) 35%, transparent);
-  backdrop-filter: blur(6px);
   transition: transform 0.25s var(--ease), border-color 0.25s, opacity 0.4s;
   user-select: none;
 }
@@ -1333,15 +1334,21 @@ kbd {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.02em;
+  gap: 0.1em 0.4em;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.2rem, 7vw, 5.4rem);
+  font-size: clamp(1.8rem, 7vw, 5.4rem);
   line-height: 1;
   letter-spacing: 0.02em;
 }
 
-.decode span {
+.decode-word {
+  display: inline-flex;
+  gap: 0.02em;
+  white-space: nowrap;
+}
+
+.decode-word span {
   display: inline-grid;
   place-items: center;
 }
@@ -1359,10 +1366,6 @@ kbd {
   color: var(--c);
   text-shadow: 0 0 24px color-mix(in srgb, var(--c) 45%, transparent);
   animation: lock-in 0.45s var(--ease) both;
-}
-
-.decode .decode-gap {
-  width: 0.4em;
 }
 
 .pow {

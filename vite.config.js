@@ -15,8 +15,8 @@ export default defineConfig({
           // Without this, any group would also pull in its dependencies (e.g. React).
           includeDependenciesRecursively: false,
           groups: [
-            { name: 'react', test: /node_modules[\/](react|react-dom|scheduler)[\/]/, priority: 30 },
-            { name: 'motion', test: /node_modules[\/](framer-motion|motion-dom|motion-utils)[\/]/, priority: 30 },
+            { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/, priority: 30 },
+            { name: 'motion', test: /node_modules[\\/](framer-motion|motion-dom|motion-utils)[\\/]/, priority: 30 },
             // three.js and every library that extends its classes must share one
             // chunk: splitting them apart breaks `class X extends THREE.Y` at load.
             { name: 'three', test: /node_modules/, priority: 10 },

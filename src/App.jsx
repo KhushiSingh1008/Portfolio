@@ -164,7 +164,16 @@ export default function App() {
 
       <AnimatePresence>{notebookId && <Notebook key="notebook" id={notebookId} onSelect={navigate} reduced={reduced} />}</AnimatePresence>
 
-      {booted && <Typewriter command={command} activeId={activeId} onKey={handleKey} onHome={() => navigate(null)} reduced={reduced} />}
+      {booted && (
+        <Typewriter
+          command={command}
+          activeId={activeId}
+          onKey={handleKey}
+          onHome={() => navigate(null)}
+          reduced={reduced}
+          paused={compact && Boolean(notebookId)}
+        />
+      )}
 
       <Loader onDone={boot} reduced={reduced} />
       <CustomCursor />

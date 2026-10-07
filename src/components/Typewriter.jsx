@@ -7,7 +7,7 @@ import TypewriterModel from './typewriter/TypewriterModel'
 
 // A 3D typewriter that types every navigation command onto its paper.
 // Physical keys, clicks on the 3D keys and the chips below all route through onKey.
-export default function Typewriter({ command, activeId, onKey, onHome, reduced }) {
+export default function Typewriter({ command, activeId, onKey, onHome, reduced, paused }) {
   const [engine] = useState(createEngine)
   const [live, setLive] = useState('')
   const [muted, setMuted] = useState(sound.isMuted)
@@ -54,7 +54,14 @@ export default function Typewriter({ command, activeId, onKey, onHome, reduced }
   return (
     <section className="typewriter-dock" aria-label="Typewriter navigation">
       <div className="tw-stage">
-        <Canvas camera={{ position: [0, 5.4, 5.6], fov: 31 }} dpr={[1, 2]} gl={{ antialias: true, alpha: true }} onCreated={({ camera }) => camera.lookAt(0, 1.05, -0.15)}>
+        {/* paused: the dock is hidden (phone layout with the notebook open), so stop rendering it. */}
+        <Canvas
+          camera={{ position: [0, 5.4, 5.6], fov: 31 }}
+          dpr={[1, 1.5]}
+          frameloop={paused ? 'never' : 'always'}
+          gl={{ antialias: true, alpha: true }}
+          onCreated={({ camera }) => camera.lookAt(0, 1.05, -0.15)}
+        >
           <TypewriterModel engine={engine} onKey={onKey} onHome={onHome} />
         </Canvas>
       </div>
