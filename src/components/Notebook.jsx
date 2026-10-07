@@ -162,6 +162,7 @@ export default function Notebook({ id, onSelect, reduced }) {
               style={{ '--c': s.color, '--ink': s.ink }}
               onClick={() => onSelect(s.id)}
               aria-label={`${s.label} (press ${s.key.toUpperCase()})`}
+              title={s.label}
             >
               <kbd>{s.key.toUpperCase()}</kbd>
               <span>{s.label}</span>

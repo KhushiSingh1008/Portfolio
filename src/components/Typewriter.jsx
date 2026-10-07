@@ -81,12 +81,13 @@ export default function Typewriter({ command, activeId, onKey, onHome, reduced }
         </button>
         <button
           type="button"
-          className="tw-chip ghost sound"
+          className={`tw-chip sound${muted ? ' muted' : ''}`}
           onClick={() => sound.setMuted(!muted)}
           aria-pressed={!muted}
           aria-label={muted ? 'Turn typewriter sound on' : 'Mute typewriter sound'}
+          title={muted ? 'Sound off' : 'Sound on'}
         >
-          {muted ? 'sound off' : 'sound on'}
+          ♪
         </button>
       </div>
 

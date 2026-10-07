@@ -383,7 +383,15 @@ kbd {
 }
 
 .tw-chip.sound {
-  font-size: 0.66rem;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: rgba(196, 181, 253, 0.14);
+  border-color: rgba(196, 181, 253, 0.45);
+}
+
+.tw-chip.sound.muted {
+  opacity: 0.55;
+  text-decoration: line-through;
 }
 
 .sr-only {
@@ -1623,6 +1631,20 @@ body.cursor-active * {
 
 @media (max-height: 1000px) and (min-width: 901px) {
   .hero-tags {
+    display: none;
+  }
+}
+
+/* Short laptop screens: index tabs show only their key so all seven fit. */
+@media (max-height: 860px) and (min-width: 901px) {
+  .nb-tabs {
+    top: 40px;
+    gap: 5px;
+  }
+  .nb-tab {
+    padding: 7px 0 7px 8px;
+  }
+  .nb-tab span {
     display: none;
   }
 }

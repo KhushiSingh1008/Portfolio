@@ -4,8 +4,8 @@ function About() {
   return (
     <>
       <p className="lede">
-        I am a third-year B.E. Information Technology student at VESIT, Mumbai, with a CGPA of <strong>9.92 / 10</strong> through
-        Semester 6. My work sits where distributed systems, artificial intelligence and biological computing meet.
+        I am a final-year B.E. Information Technology student at VESIT, Mumbai (2023–2027), with a CGPA of <strong>9.92 / 10</strong>
+        through Semester 6. My work sits where distributed systems, artificial intelligence and biological computing meet.
       </p>
       <p>
         I treat algorithmic research and software architecture as two sides of one job: observe a messy, nonlinear system, then design a
@@ -165,8 +165,9 @@ function Resume() {
         <span className="badge">B.E.</span>
         <div>
           <strong>Information Technology, VESIT Mumbai</strong>
-          <span className="dim">CGPA 9.92 / 10 through Semester 6</span>
+          <span className="dim">Vivekanand Education Society’s Institute of Technology · CGPA 9.92 / 10 (till Sem 6)</span>
         </div>
+        <span className="eyebrow">2023–2027</span>
       </div>
       <h5 className="sub">Skills</h5>
       {skills.map((s) => (
@@ -181,10 +182,11 @@ function Resume() {
       ))}
       <h5 className="sub">Highlights</h5>
       <ul className="ticks">
-        <li>1st place, Hack4Innovation 2026 for NaviSense, an offline edge-AI navigation aid.</li>
-        <li>BioToken anomaly classifier: AUC 0.9798 on 77,901 molecules.</li>
+        <li>BioToken research paper presented at IJCACI 2026, WUST, USA (Springer, in press).</li>
+        <li>1st place, Hack4Innovation 2026 for NaviSense, an on-device vision aid for low-connectivity regions.</li>
+        <li>BioToken anomaly classifier: AUC 0.9798, F1 0.9351 on 77,901 molecules.</li>
         <li>RecBlock: gasless EHR transactions at $0.003 each via ERC-4337.</li>
-        <li>Research intern at VJTI, medical computer vision with ViTs.</li>
+        <li>Research intern at VJTI: medical image classification with ResNet and vision transformers.</li>
       </ul>
       <div className="pdf-frame">
         <iframe src="/resume.pdf#view=FitH" title="Khushi Singh resume (PDF)" loading="lazy" />

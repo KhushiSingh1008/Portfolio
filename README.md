@@ -1,16 +1,53 @@
-# React + Vite
+# Khushi Singh · Neural Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A 3D portfolio: each neuron in a neural network holds one section, a 3D typewriter
+types the navigation commands, and sections open in a flip-book notebook.
 
-Currently, two official plugins are available:
+Built with React 19, Vite 8, three.js (React Three Fiber + drei) and framer-motion.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Run locally
 
-## React Compiler
+Requires Node 24 (see `engines` in `package.json`).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev       # http://localhost:5173
+```
 
-## Expanding the ESLint configuration
+| Script | What it does |
+|---|---|
+| `npm run dev` | Dev server with hot reload |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | ESLint |
+| `npm run check` | Lint, then build (run before deploying) |
+| `npm run deploy:preview` | Deploy a preview URL to Vercel |
+| `npm run deploy` | Deploy to production on Vercel |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Deploy to Vercel
+
+**Option A: Git (recommended).** Push this repo to GitHub, then in Vercel choose
+*Add New → Project* and import it. `vercel.json` already sets the framework (Vite),
+build command, output directory, caching and security headers, so the defaults work.
+Every push to `main` then deploys to production, and other branches get preview URLs.
+
+**Option B: CLI.**
+
+```bash
+npm run check            # make sure lint and build pass
+npm run deploy:preview   # first run asks you to log in and link the project
+npm run deploy           # production
+```
+
+## Where things live
+
+| Path | Contents |
+|---|---|
+| `src/data/sections.js` | Section names, keys, colours and neuron positions |
+| `src/data/content.js` | Projects, experience, honors, skills, contacts |
+| `src/components/SectionContent.jsx` | The text on each notebook page |
+| `src/components/Notebook.jsx` | Notebook, cover and page-flip animation |
+| `src/components/typewriter/` | 3D typewriter model and paper/typing engine |
+| `src/components/NeuralScene.jsx` | The 3D neural network |
+| `src/components/Loader.jsx` | Blockchain loading screen |
+| `public/resume.pdf` | Resume linked from the Resume page |
